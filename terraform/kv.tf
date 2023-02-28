@@ -25,8 +25,8 @@ resource "azurerm_key_vault" "kv" {
   }
 }
 
-resource "azurerm_key_vault_secret" "example" {
+resource "azurerm_key_vault_secret" "secret1" {
   name         = "somesecret"
   value        = "somevalue"
-  key_vault_id = azurerm_key_vault.example.id
+  key_vault_id = azurerm_key_vault.kv.id
 }
