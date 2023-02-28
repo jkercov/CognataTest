@@ -1,0 +1,47 @@
+trigger:
+  - 'main'
+
+pool:
+  vmImage: 'Ubuntu-20.04'
+variables: 
+  - name: "VERSION"
+    value: ${Build.BuildNumber}
+stages:
+- stage: PreBuild
+  displayName: PreBuild phase
+  jobs:
+    - job: PreBuild
+      steps:
+      - task: Docker@2
+        displayName: Login to ACR
+        inputs:
+          command: login
+          containerRegistry: ${ACR}
+      - checkout: self
+- stage: Build and Test
+  jobs:
+    - job: Build
+      displayName: Build
+      steps:
+      - task: CmdLine@2
+        inputs:
+          script: |
+            cd Make/
+            make build
+    - job: Test
+      displayName: Test
+      steps:
+      - task: CmdLine@2
+        inputs:
+          script: |
+            cd Make/
+            make test
+    - job: Push
+      displayName: Push
+      steps:
+      - task: CmdLine@2
+        inputs:
+          script: |
+            cd Make/
+            make push
+

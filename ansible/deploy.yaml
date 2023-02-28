@@ -1,0 +1,11 @@
+---
+- name: copy Docker Compose files
+  copy:
+    src: docker-compose.yaml
+    dest: /home/cognata/docker-compose.yaml
+
+- name: deploy Docker Compose stack
+  community.docker.docker_compose:
+    project_src: /home/cognata
+    files:
+    - docker-compose.yml
